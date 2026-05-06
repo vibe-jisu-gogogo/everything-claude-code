@@ -22,7 +22,7 @@
 你作为**编排器**，协调多模型协同系统（调研 → 创意生成 → 计划 → 实现 → 优化 → 评审）。面向经验丰富的开发者进行简洁、专业的沟通。
 
 **协同模型**:
-- **ace-tool MCP**(可选) – 代码获取 + 提示词增强
+- **ace-tool MCP**(可选) – 代码获取 + Prompt增强
 - **Codex** – 后端逻辑、算法、调试（**后端权威，可信赖**）
 - **Gemini** – 前端UI/UX、视觉设计（**前端专家，后端意见仅供参考**）
 - **Claude(自身)** – 编排、计划、实现、交付
@@ -37,7 +37,7 @@
 # 新会话调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}- \"$PWD\" <<'EOF'
-ROLE_FILE: <角色提示词路径>
+ROLE_FILE: <角色Prompt路径>
 <TASK>
 Requirement: <增强后的要求（或未增强时使用$ARGUMENTS）>
 Context: <来自前一阶段的项目上下文和分析>
@@ -52,7 +52,7 @@ EOF",
 # 会话恢复调用
 Bash({
   command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <角色提示词路径>
+ROLE_FILE: <角色Prompt路径>
 <TASK>
 Requirement: <增强后的要求（或未增强时使用$ARGUMENTS）>
 Context: <来自前一阶段的项目上下文和分析>
@@ -68,7 +68,7 @@ EOF",
 **模型参数注意事项**:
 - `{{GEMINI_MODEL_FLAG}}`: 使用`--backend gemini`时，替换为`--gemini-model gemini-3-pro-preview`（注意末尾空格）；codex时使用空字符串
 
-**角色提示词**:
+**角色Prompt**:
 
 | 阶段 | Codex | Gemini |
 |-------|-------|--------|
@@ -111,7 +111,7 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 
 `[Mode: Research]` - 理解需求并收集上下文:
 
-1. **提示词增强**（ace-tool MCP可用时）: 调用`mcp__ace-tool__enhance_prompt`，**为后续所有Codex/Gemini调用用增强结果替换原始的$ARGUMENTS**。不可用时直接使用`$ARGUMENTS`。
+1. **Prompt增强**（ace-tool MCP可用时）: 调用`mcp__ace-tool__enhance_prompt`，**为后续所有Codex/Gemini调用用增强结果替换原始的$ARGUMENTS**。不可用时直接使用`$ARGUMENTS`。
 2. **上下文获取**（ace-tool MCP可用时）: 调用`mcp__ace-tool__search_context`。不可用时使用内置工具: `Glob`搜索文件、`Grep`搜索符号、`Read`收集上下文、`Task`(Explore agent)进行更深入探索。
 3. **需求完整性评分**(0-10):
    - 目标清晰度(0-3)、期望结果(0-3)、范围边界(0-2)、约束条件(0-2)
@@ -122,8 +122,8 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 `[Mode: Ideation]` - 多模型并行分析:
 
 **并行调用**(`run_in_background: true`):
-- Codex: 使用分析器提示词，输出技术可行性、解决方案、风险
-- Gemini: 使用分析器提示词，输出UI可行性、解决方案、UX评估
+- Codex: 使用分析器Prompt，输出技术可行性、解决方案、风险
+- Gemini: 使用分析器Prompt，输出UI可行性、解决方案、UX评估
 
 通过`TaskOutput`等待结果。保存**SESSION_ID**（`CODEX_SESSION`和`GEMINI_SESSION`）。
 
@@ -136,8 +136,8 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 `[Mode: Plan]` - 多模型协同计划:
 
 **并行调用**（通过`resume <SESSION_ID>`恢复会话）:
-- Codex: 使用架构师提示词 + `resume $CODEX_SESSION`，输出后端架构
-- Gemini: 使用架构师提示词 + `resume $GEMINI_SESSION`，输出前端架构
+- Codex: 使用架构师Prompt + `resume $CODEX_SESSION`，输出后端架构
+- Gemini: 使用架构师Prompt + `resume $GEMINI_SESSION`，输出前端架构
 
 通过`TaskOutput`等待结果。
 
@@ -158,8 +158,8 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 `[Mode: Optimize]` - 多模型并行评审:
 
 **并行调用**:
-- Codex: 使用评审员提示词，关注安全、性能、错误处理
-- Gemini: 使用评审员提示词，关注可访问性、设计一致性
+- Codex: 使用评审员Prompt，关注安全、性能、错误处理
+- Gemini: 使用评审员Prompt，关注可访问性、设计一致性
 
 通过`TaskOutput`等待结果。整合评审反馈，用户确认后执行优化。
 
