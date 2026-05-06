@@ -1,14 +1,9 @@
 # 🌐 翻译任务待办清单
 
-> 最后更新：2026-05-06 17:54:36
+> 最后更新：2026-05-06 18:00:32
 > 待翻译：1335 个 | 翻译中：0 个 | 已完成：25 个 | 失败：0 个
 ## ⏳ 待翻译 (Pending)
 - [ ] `... [OUTPUT TRUNCATED - 2826 chars omitted out of 52826 total] ...`
-- [ ] `./.agents/skills/market-research/SKILL.md`
-- [ ] `./.agents/skills/mcp-server-patterns/SKILL.md`
-- [ ] `./.agents/skills/nextjs-turbopack/SKILL.md`
-- [ ] `./.agents/skills/product-capability/SKILL.md`
-- [ ] `./.agents/skills/security-review/SKILL.md`
 - [ ] `./.agents/skills/strategic-compact/SKILL.md`
 - [ ] `./.agents/skills/tdd-workflow/SKILL.md`
 - [ ] `./.agents/skills/verification-loop/SKILL.md`
@@ -1341,6 +1336,7 @@
 - [ ] `cs/tr/rules/common/development-workflow.md`
 
 ## 🔄 翻译中 (Translating)
+- [ ] `./.agents/skills/security-review/SKILL.md`
 - 暂无
 
 ## ✅ 已完成 (Completed)
@@ -1367,6 +1363,10 @@
 - [x] `./CODE_OF_CONDUCT.md`
 
 ## ❌ 失败 (Failed)
+- [ ] `./.agents/skills/product-capability/SKILL.md`
+- [ ] `./.agents/skills/nextjs-turbopack/SKILL.md`
+- [ ] `./.agents/skills/mcp-server-patterns/SKILL.md`
+- [ ] `./.agents/skills/market-research/SKILL.md`
 - [x] `/.agents/skills/investor-outreach/SKILL.md`
 - [x] `/.agents/skills/investor-materials/SKILL.md`
 - [x] `/.agents/skills/frontend-slides/STYLE_PRESETS.md`
