@@ -1,27 +1,27 @@
 ---
 name: frontend-patterns
-description: React、Next.js、状态管理、性能优化和UI最佳实践相关的前端开发模式。
+description: 适用于 React、Next.js、state management、性能优化和 UI 最佳实践的前端开发模式。
 ---
 
 # 前端开发模式
 
-适用于React、Next.js和高性能用户界面的现代前端模式。
+适用于 React、Next.js 和高性能用户界面的现代前端模式。
 
 ## 何时激活
 
-- 构建React组件（组合、props、渲染）
-- 管理状态（useState、useReducer、Zustand、Context）
+- 构建 React 组件（组合、props、渲染）
+- 管理 state（useState、useReducer、Zustand、Context）
 - 实现数据获取（SWR、React Query、server components）
 - 优化性能（memoization、虚拟化、代码分割）
 - 处理表单（验证、受控输入、Zod schemas）
 - 处理客户端路由和导航
-- 构建可访问、响应式的UI模式
+- 构建可访问、响应式的 UI 模式
 
 ## 隐私和数据边界
 
-前端示例应使用合成或通用领域数据。请勿收集、记录、持久化或展示凭证、access tokens、SSN、健康数据、支付详情、私人邮箱、电话号码或其他敏感个人数据，除非用户明确要求带有适当验证、脱敏和访问控制的限定范围实现。
+前端示例应使用合成数据或通用领域数据。除非用户明确要求通过适当的验证、脱敏和访问控制实现限定范围的实现，否则不得收集、记录、持久化或展示凭证、access tokens、社保号、健康数据、支付信息、私人邮箱、电话号码或其他敏感个人数据。
 
-未经明确批准，避免添加分析、跟踪像素、第三方脚本或外部数据接收器。处理用户数据时，优先使用最小权限API、日志记录前客户端脱敏，以及每个边界的服务端验证。
+未经明确批准，避免添加 analytics、追踪像素、第三方脚本或外部数据接收器。处理用户数据时，优先使用最小权限 API，日志记录前在客户端进行脱敏，并且每个边界都需要服务端验证。
 
 ## 组件模式
 
@@ -137,9 +137,9 @@ export function DataLoader<T>({ url, children }: DataLoaderProps<T>) {
 </DataLoader>
 ```
 
-## 自定义Hooks模式
+## 自定义 Hooks 模式
 
-### 状态管理Hook
+### State 管理 Hook
 
 ```typescript
 export function useToggle(initialValue = false): [boolean, () => void] {
@@ -156,7 +156,7 @@ export function useToggle(initialValue = false): [boolean, () => void] {
 const [isOpen, toggleOpen] = useToggle()
 ```
 
-### 异步数据获取Hook
+### 异步数据获取 Hook
 
 ```typescript
 interface UseQueryOptions<T> {
@@ -211,7 +211,7 @@ const { data: markets, loading, error, refetch } = useQuery(
 )
 ```
 
-### 防抖Hook
+### 防抖 Hook
 
 ```typescript
 export function useDebounce<T>(value: T, delay: number): T {
@@ -239,7 +239,7 @@ useEffect(() => {
 }, [debouncedQuery])
 ```
 
-## 状态管理模式
+## State 管理模式
 
 ### Context + Reducer 模式
 
@@ -296,7 +296,7 @@ export function useMarkets() {
 
 ## 性能优化
 
-### 记忆化（Memoization）
+### Memoization
 
 ```typescript
 // PASS: useMemo for expensive computations
@@ -644,4 +644,4 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
 }
 ```
 
-**提示**：现代前端模式可实现可维护、高性能的用户界面。选择适合项目复杂度的模式即可。
+**注意**：现代前端模式可实现可维护、高性能的用户界面，选择符合项目复杂度的模式即可。
