@@ -2,11 +2,11 @@
 description: 获取 hookify 系统的帮助
 ---
 
-显示全面的 hookify 文档。
+显示完整的 hookify 文档。
 
 ## Hook 系统概述
 
-Hookify 创建规则文件，与 Claude Code 的 hook 系统集成以防止不需要的行为。
+Hookify 创建规则文件，与 Claude Code 的 hook 系统集成以防止不必要的行为。
 
 ### 事件类型
 
@@ -34,13 +34,13 @@ pattern: "regex pattern to match"
 
 ### 命令
 
-- `/hookify [description]` 创建新规则，当未提供描述时自动分析对话
+- `/hookify [description]` 创建新规则，在未提供描述时自动分析会话
 - `/hookify-list` 列出已配置的规则
 - `/hookify-configure` 启用或禁用规则
 
-### 模式提示
+### 模式技巧
 
 - 使用 regex 语法
-- 对于 `bash`，匹配完整的命令字符串
+- 对于 `bash`，匹配完整命令字符串
 - 对于 `file`，匹配文件路径
 - 部署前测试模式
