@@ -1,26 +1,26 @@
 ---
-description: 为 Kotlin 强制执行 TDD 工作流。先写 Kotest 测试，再实现代码。使用 Kover 验证 80%+ 覆盖率。
+description: 强制执行 Kotlin 的 TDD 工作流。先编写 Kotest 测试，然后实现代码。使用 Kover 验证 80% 以上的覆盖率。
 ---
 
 # Kotlin TDD 命令
 
-本命令使用 Kotest、MockK 和 Kover 为 Kotlin 代码强制执行测试驱动开发方法论。
+此命令使用 Kotest、MockK 和 Kover 为 Kotlin 代码强制执行测试驱动开发方法论。
 
 ## 命令功能
 
-1. **定义类型/接口**：先搭建函数签名框架
+1. **定义类型/接口**：首先搭建函数签名
 2. **编写 Kotest 测试**：创建全面的测试规范（RED）
 3. **运行测试**：验证测试因正确原因失败
-4. **实现代码**：编写最少代码通过测试（GREEN）
+4. **实现代码**：编写最少代码以通过测试（GREEN）
 5. **重构**：在保持测试通过的同时改进代码
-6. **检查覆盖率**：使用 Kover 确保 80%+ 覆盖率
+6. **检查覆盖率**：使用 Kover 确保 80% 以上的覆盖率
 
 ## 使用场景
 
 使用 `/kotlin-test` 当：
 - 实现新的 Kotlin 函数或类
 - 为现有 Kotlin 代码添加测试覆盖率
-- 修复 Bug（先编写失败的测试）
+- 修复 bug（先编写失败的测试）
 - 构建关键业务逻辑
 - 学习 Kotlin 中的 TDD 工作流
 
@@ -33,12 +33,12 @@ REFACTOR -> 改进代码，测试保持通过
 REPEAT  -> 下一个测试用例
 ```
 
-## 会话示例
+## 示例会话
 
 ````text
-用户：/kotlin-test 我需要一个验证用户注册请求的函数
+用户: /kotlin-test 我需要一个验证用户注册请求的函数
 
-Agent：
+Agent:
 # TDD 会话：注册验证器
 
 ## 步骤 1：定义接口
@@ -151,7 +151,7 @@ RegistrationValidatorTest > valid registration returns Valid FAILED
 FAILED (5 tests, 0 passed, 5 failed)
 ```
 
-✓ 测试如预期失败（NotImplementedError）。
+✓ 测试按预期失败（NotImplementedError）。
 
 ## 步骤 4：实现最少代码（GREEN）
 
@@ -261,13 +261,13 @@ class AsyncServiceTest : FunSpec({
 # 验证覆盖率阈值
 ./gradlew koverVerify
 
-# CI 的 XML 报告
+# CI 使用的 XML 报告
 ./gradlew koverXmlReport
 
 # 打开 HTML 报告
 open build/reports/kover/html/index.html
 
-# 运行特定测试类
+# 运行特定的测试类
 ./gradlew test --tests "com.example.UserServiceTest"
 
 # 详细输出运行
@@ -277,7 +277,7 @@ open build/reports/kover/html/index.html
 ## 覆盖率目标
 
 | 代码类型 | 目标 |
-|-----------|--------|
+|---------|------|
 | 关键业务逻辑 | 100% |
 | 公共 APIs | 90%+ |
 | 一般代码 | 80%+ |
@@ -286,12 +286,12 @@ open build/reports/kover/html/index.html
 ## TDD 最佳实践
 
 **应该做：**
-- 先写测试，再实现任何代码
+- 先写测试，再实现
 - 每次更改后运行测试
-- 使用 Kotest matchers 进行富有表现力的断言
+- 使用 Kotest matchers 进行表达性断言
 - 对 suspend 函数使用 MockK 的 `coEvery`/`coVerify`
-- 测试行为，而不是实现细节
-- 包含边界情况（空、null、最大值）
+- 测试行为，而非实现细节
+- 包含边界情况（空值、null、最大值）
 
 **不应该做：**
 - 在测试之前编写实现
@@ -304,9 +304,9 @@ open build/reports/kover/html/index.html
 
 - `/kotlin-build` - 修复构建错误
 - `/kotlin-review` - 实现后审查代码
-- `verification-loop` 技能 - 运行完整的验证循环
+- `verification-loop` skill - 运行完整的验证循环
 
-## 相关
+## 相关内容
 
-- 技能：`skills/kotlin-testing/`
-- 技能：`skills/tdd-workflow/`
+- Skill: `skills/kotlin-testing/`
+- Skill: `skills/tdd-workflow/`
