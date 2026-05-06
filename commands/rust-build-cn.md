@@ -1,27 +1,27 @@
 ---
-description: 增量修复 Rust build 错误、借用检查器问题和依赖问题。调用 rust-build-resolver agent 进行最小化、精确的修复。
+description: 渐进式修复 Rust 构建错误、借用检查器问题和依赖问题。调用 rust-build-resolver agent 进行最小化、精准的修复。
 ---
 
 # Rust 构建与修复
 
-此命令调用 **rust-build-resolver** agent，以最小化的变更增量修复 Rust build 错误。
+此命令调用 **rust-build-resolver** agent，以最小化的修改渐进式修复 Rust 构建错误。
 
 ## 命令功能
 
 1. **运行诊断**：执行 `cargo check`、`cargo clippy`、`cargo fmt --check`
 2. **解析错误**：识别错误代码和受影响的文件
-3. **增量修复**：一次修复一个错误
-4. **验证每个修复**：每次变更后重新运行 `cargo check`
-5. **报告摘要**：显示已修复的内容和剩余问题
+3. **渐进式修复**：一次修复一个错误
+4. **验证每个修复**：每次修改后重新运行 `cargo check`
+5. **报告摘要**：显示已修复内容和剩余问题
 
 ## 何时使用
 
 使用 `/rust-build` 当：
-- `cargo build` 或 `cargo check` 失败并出现错误
-- `cargo clippy` 报告警告
-- 借用检查器或生命周期错误阻止编译
-- Cargo 依赖解析失败
-- 拉取破坏构建的变更后
+- `cargo build` 或 `cargo check` 报错时
+- `cargo clippy` 报告警告时
+- 借用检查器或生命周期错误阻止编译时
+- Cargo 依赖解析失败时
+- 拉取破坏构建的更改后
 
 ## 运行的诊断命令
 
@@ -42,13 +42,13 @@ cargo tree --duplicates
 if command -v cargo-audit >/dev/null; then cargo audit; else echo "cargo-audit not installed"; fi
 ```
 
-## 示例会话
+## 会话示例
 
 ````text
 用户: /rust-build
 
 Agent:
-# Rust 构建解决
+# Rust 构建解决方案
 
 ## 初始诊断
 
@@ -62,16 +62,16 @@ error[E0425]: cannot find value `db` in this scope
   --> src/handler/api.rs:58:9
 ```
 
-发现错误：3个
+发现错误：3 个
 
-## 修复1：借用检查器错误
+## 修复 1：借用检查器错误
 
-文件: src/service/cache.rs:25
-错误: E0502 — cannot borrow `map` as mutable because also borrowed as immutable
-原因: 不可变借用在可变插入期间仍然活跃
+文件：src/service/cache.rs:25
+错误：E0502 — 无法可变借用 `map` 因为已被不可变借用
+原因：可变插入期间不可变借用仍处于活动状态
 
 ```rust
-// 变更: 重构以在可变访问前结束不可变借用
+// 已更改：重构以在可变访问前结束不可变借用
 if !map.contains_key("key") {
     map.insert("key".into(), default);
 }
@@ -82,15 +82,15 @@ $ cargo check
 # 剩余 2 个错误
 ```
 
-## 修复2：类型不匹配
+## 修复 2：类型不匹配
 
-文件: src/handler/api.rs:42
-错误: E0308 — mismatched types: expected `usize`, found `&str`
+文件：src/handler/api.rs:42
+错误：E0308 — 类型不匹配：期望 `usize`，找到 `&str`
 
 ```rust
-// 变更前
+// 已更改
 let count = params.get("count");
-// 变更后
+// 改为
 let count: usize = params.get("count")
     .and_then(|s| s.parse().ok())
     .unwrap_or(0);
@@ -101,14 +101,14 @@ $ cargo check
 # 剩余 1 个错误
 ```
 
-## 修复3：未解析名称
+## 修复 3：未解析的名称
 
-文件: src/handler/api.rs:58
-错误: E0425 — cannot find value `db` in this scope
-原因: 缺少导入
+文件：src/handler/api.rs:58
+错误：E0425 — 在此作用域中找不到值 `db`
+原因：缺少导入
 
 ```rust
-// 添加
+// 已添加
 use crate::db;
 ```
 
@@ -138,22 +138,22 @@ test result: ok. 6 passed; 0 failed; 0 ignored
 ## 摘要
 
 | 指标 | 数量 |
-|--------|-------|
-| 已修复的构建错误 | 3 |
-| 已修复的 Clippy 警告 | 0 |
-| 修改的文件 | 2 |
+|------|------|
+| 已修复构建错误 | 3 |
+| 已修复 Clippy 警告 | 0 |
+| 已修改文件 | 2 |
 | 剩余问题 | 0 |
 
 构建状态：成功
 ````
 
-## 常见修复的错误
+## 常见修复错误
 
 | 错误 | 典型修复 |
-|-------|-------------|
-| `cannot borrow as mutable` | 重构以先结束不可变借用；仅在合理时clone |
-| `does not live long enough` | 使用所有权类型或添加生命周期注解 |
-| `cannot move out of` | 重构以获取所有权；仅作为最后手段clone |
+|------|----------|
+| `cannot borrow as mutable` | 重构以先结束不可变借用；仅在合理时克隆 |
+| `does not live long enough` | 使用自有类型或添加生命周期注解 |
+| `cannot move out of` | 重构以获取所有权；仅作为最后手段克隆 |
 | `mismatched types` | 添加 `.into()`、`as` 或显式转换 |
 | `trait X not implemented` | 添加 `#[derive(Trait)]` 或手动实现 |
 | `unresolved import` | 添加到 Cargo.toml 或修复 `use` 路径 |
@@ -161,18 +161,18 @@ test result: ok. 6 passed; 0 failed; 0 ignored
 
 ## 修复策略
 
-1. **先修复构建错误** - 代码必须编译
-2. **再修复 Clippy 警告** - 修复可疑的结构
-3. **然后格式化** - `cargo fmt` 合规
-4. **一次一个修复** - 验证每个变更
-5. **最小化变更** - 不要重构，只需修复
+1. **首先修复构建错误** - 代码必须能编译
+2. **其次修复 Clippy 警告** - 修复可疑代码结构
+3. **再次修复格式化** - 符合 `cargo fmt` 规范
+4. **一次一个修复** - 验证每次更改
+5. **最小化修改** - 不重构，只修复
 
 ## 停止条件
 
-Agent 将停止并报告如果：
-- 相同错误在 3 次尝试后仍然存在
+Agent 将停止并报告当：
+- 3 次尝试后相同错误仍存在
 - 修复引入更多错误
-- 需要架构变更
+- 需要架构更改
 - 借用检查器错误需要重新设计数据所有权
 
 ## 相关命令
