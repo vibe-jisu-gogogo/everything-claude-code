@@ -1,56 +1,56 @@
 ---
-description: Fix Rust build errors, borrow checker issues, and dependency problems incrementally. Invokes the rust-build-resolver agent for minimal, surgical fixes.
+description: 增量修复 Rust build errors、borrow checker issues 和 dependency problems。调用 rust-build-resolver agent 进行最小化的精准修复。
 ---
 
 # Rust 构建与修复
 
-此命令调用 **rust-build-resolver** agent，以最小化的变更增量修复 Rust 构建错误。
+此命令调用 **rust-build-resolver** agent，以最小变更增量修复 Rust build errors。
 
-## 此命令的功能
+## What This Command Does
 
-1. **运行诊断**：执行 `cargo check`、`cargo clippy`、`cargo fmt --check`
-2. **解析错误**：识别错误代码和受影响的文件
-3. **增量修复**：一次修复一个错误
-4. **验证每个修复**：每次变更后重新运行 `cargo check`
-5. **报告摘要**：显示已修复内容和剩余问题
+1. **Run Diagnostics**：执行 `cargo check`、`cargo clippy`、`cargo fmt --check`
+2. **Parse Errors**：识别 error codes 和受影响的文件
+3. **Fix Incrementally**：一次修复一个错误
+4. **Verify Each Fix**：每次修改后重新运行 `cargo check`
+5. **Report Summary**：显示已修复内容和剩余问题
 
-## 何时使用
+## When to Use
 
-使用 `/rust-build` 当：
-- `cargo build` 或 `cargo check` 失败并出现错误
-- `cargo clippy` 报告警告
-- Borrow checker 或生命周期错误阻碍编译
-- Cargo 依赖解析失败
-- 拉取破坏构建的变更后
+在以下情况使用 `/rust-build`：
+- `cargo build` 或 `cargo check` 运行失败并报错
+- `cargo clippy` 报告 warnings
+- Borrow checker 或 lifetime errors 阻碍编译
+- Cargo dependency resolution 失败
+- 拉取的变更导致构建失败后
 
-## 运行的诊断命令
+## Diagnostic Commands Run
 
 ```bash
-# 主要构建检查
+# Primary build check
 cargo check 2>&1
 
-# Lints 和建议
+# Lints and suggestions
 cargo clippy -- -D warnings 2>&1
 
-# 格式化检查
+# Formatting check
 cargo fmt --check 2>&1
 
-# 依赖问题
+# Dependency issues
 cargo tree --duplicates
 
-# 安全审计（如果可用）
+# Security audit (if available)
 if command -v cargo-audit >/dev/null; then cargo audit; else echo "cargo-audit not installed"; fi
 ```
 
-## 示例会话
+## Example Session
 
 ````text
-用户: /rust-build
+User: /rust-build
 
 Agent:
-# Rust 构建解决方案
+# Rust Build Resolution
 
-## 初始诊断
+## Initial Diagnostics
 
 ```bash
 $ cargo check
@@ -62,16 +62,16 @@ error[E0425]: cannot find value `db` in this scope
   --> src/handler/api.rs:58:9
 ```
 
-发现错误：3 个
+Errors found: 3
 
-## 修复 1：Borrow Checker 错误
+## Fix 1: Borrow Checker Error
 
-文件：src/service/cache.rs:25
-错误：E0502 — cannot borrow `map` as mutable because also borrowed as immutable
-原因：可变插入期间不可变借用仍然处于活动状态
+File: src/service/cache.rs:25
+Error: E0502 — cannot borrow `map` as mutable because also borrowed as immutable
+Cause: Immutable borrow still active during mutable insert
 
 ```rust
-// 变更：重构以在可变访问之前结束不可变借用
+// Changed: restructured to end immutable borrow before mutable access
 if !map.contains_key("key") {
     map.insert("key".into(), default);
 }
@@ -79,18 +79,18 @@ if !map.contains_key("key") {
 
 ```bash
 $ cargo check
-# 剩余 2 个错误
+# 2 errors remaining
 ```
 
-## 修复 2：类型不匹配
+## Fix 2: Type Mismatch
 
-文件：src/handler/api.rs:42
-错误：E0308 — mismatched types: expected `usize`, found `&str`
+File: src/handler/api.rs:42
+Error: E0308 — mismatched types: expected `usize`, found `&str`
 
 ```rust
-// 变更前
+// Changed
 let count = params.get("count");
-// 变更后
+// To
 let count: usize = params.get("count")
     .and_then(|s| s.parse().ok())
     .unwrap_or(0);
@@ -98,30 +98,30 @@ let count: usize = params.get("count")
 
 ```bash
 $ cargo check
-# 剩余 1 个错误
+# 1 error remaining
 ```
 
-## 修复 3：未解析的名称
+## Fix 3: Unresolved Name
 
-文件：src/handler/api.rs:58
-错误：E0425 — cannot find value `db` in this scope
-原因：缺少导入
+File: src/handler/api.rs:58
+Error: E0425 — cannot find value `db` in this scope
+Cause: Missing import
 
 ```rust
-// 添加
+// Added
 use crate::db;
 ```
 
 ```bash
 $ cargo check
-# 构建成功！
+# Build successful!
 ```
 
-## 最终验证
+## Final Verification
 
 ```bash
 $ cargo clippy -- -D warnings
-# 无警告
+# No warnings
 
 $ cargo test
 running 6 tests
@@ -135,54 +135,53 @@ test handler::api::tests::test_response ... ok
 test result: ok. 6 passed; 0 failed; 0 ignored
 ```
 
-## 摘要
+## Summary
 
-| 指标 | 数量 |
-|------|------|
-| 已修复的构建错误 | 3 |
-| 已修复的 Clippy 警告 | 0 |
-| 修改的文件 | 2 |
-| 剩余问题 | 0 |
+| Metric | Count |
+|--------|-------|
+| Build errors fixed | 3 |
+| Clippy warnings fixed | 0 |
+| Files modified | 2 |
+| Remaining issues | 0 |
 
-构建状态：SUCCESS
-
+Build Status: SUCCESS
 ````
 
-## 常见已修复错误
+## Common Errors Fixed
 
-| 错误 | 典型修复 |
-|------|----------|
-| `cannot borrow as mutable` | 重构以首先结束不可变借用；仅在有正当理由时才 clone |
-| `does not live long enough` | 使用拥有的类型或添加生命周期注解 |
-| `cannot move out of` | 重构以获取所有权；仅作为最后手段才 clone |
-| `mismatched types` | 添加 `.into()`、`as` 或显式转换 |
-| `trait X not implemented` | 添加 `#[derive(Trait)]` 或手动实现 |
-| `unresolved import` | 添加到 Cargo.toml 或修复 `use` 路径 |
-| `cannot find value` | 添加导入或修复路径 |
+| Error | Typical Fix |
+|-------|-------------|
+| `cannot borrow as mutable` | Restructure to end immutable borrow first; clone only if justified |
+| `does not live long enough` | Use owned type or add lifetime annotation |
+| `cannot move out of` | Restructure to take ownership; clone only as last resort |
+| `mismatched types` | Add `.into()`, `as`, or explicit conversion |
+| `trait X not implemented` | Add `#[derive(Trait)]` or implement manually |
+| `unresolved import` | Add to Cargo.toml or fix `use` path |
+| `cannot find value` | Add import or fix path |
 
-## 修复策略
+## Fix Strategy
 
-1. **首先修复构建错误** - 代码必须编译
-2. **其次修复 Clippy 警告** - 修复可疑结构
-3. **第三修复格式化** - `cargo fmt` 合规性
-4. **一次一个修复** - 验证每个变更
-5. **最小化变更** - 不要重构，只修复
+1. **Build errors first** - 代码必须能够编译
+2. **Clippy warnings second** - Fix suspicious constructs
+3. **Formatting third** - `cargo fmt` compliance
+4. **One fix at a time** - Verify each change
+5. **Minimal changes** - Don't refactor, just fix
 
-## 停止条件
+## Stop Conditions
 
-Agent 将停止并报告如果：
-- 相同错误在 3 次尝试后仍然存在
-- 修复引入更多错误
-- 需要架构变更
-- Borrow checker 错误需要重新设计数据所有权
+Agent 将在以下情况停止并报告：
+- Same error persists after 3 attempts
+- Fix introduces more errors
+- Requires architectural changes
+- Borrow checker error requires redesigning data ownership
 
-## 相关命令
+## Related Commands
 
-- `/rust-test` - 构建成功后运行测试
-- `/rust-review` - 审查代码质量
-- `verification-loop` skill - 完整验证循环
+- `/rust-test` - Run tests after build succeeds
+- `/rust-review` - Review code quality
+- `verification-loop` skill - Full verification loop
 
-## 相关
+## Related
 
 - Agent: `agents/rust-build-resolver.md`
 - Skill: `skills/rust-patterns/`
