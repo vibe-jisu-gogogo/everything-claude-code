@@ -1,219 +1,219 @@
 ---
-description: 全面的 Python 代码审查，检查 PEP 8 合规性、type hints、安全性和 Pythonic 惯用法。调用 python-reviewer agent。
+description: 针对 PEP 8 compliance、type hints、security 和 Pythonic idioms 的综合 Python code review。调用 python-reviewer agent。
 ---
 
-# Python 代码审查
+# Python Code Review
 
-此命令调用 **python-reviewer** agent 进行全面的 Python 特定代码审查。
+此命令调用 **python-reviewer** agent 进行综合的 Python 特定代码审查。
 
 ## 此命令的功能
 
-1. **识别 Python 变更**：通过 `git diff` 查找修改后的 `.py` 文件
+1. **识别 Python 更改**：通过 `git diff` 查找修改的 `.py` 文件
 2. **运行静态分析**：执行 `ruff`、`mypy`、`pylint`、`black --check`
-3. **安全扫描**：检查 SQL 注入、命令注入、不安全的反序列化
-4. **类型安全审查**：分析 type hints 和 mypy 错误
-5. **Pythonic 代码检查**：验证代码遵循 PEP 8 和 Python 最佳实践
-6. **生成报告**：按严重程度对问题进行分类
+3. **Security Scan**：检查 SQL injection、command injection、unsafe deserialization
+4. **Type Safety Review**：分析 type hints 和 mypy errors
+5. **Pythonic Code Check**：验证代码遵循 PEP 8 和 Python 最佳实践
+6. **生成报告**：按 severity 分类问题
 
 ## 何时使用
 
-使用 `/python-review` 当：
+在以下情况下使用 `/python-review`：
 - 编写或修改 Python 代码后
-- 提交 Python 变更前
-- 审查包含 Python 代码的 pull requests
-- 上手新的 Python 代码库
-- 学习 Pythonic 模式和惯用法
+- 提交 Python 更改之前
+- 审查包含 Python 代码的 pull request
+- 加入新的 Python codebase 时
+- 学习 Pythonic patterns 和 idioms 时
 
 ## 审查类别
 
-### 严重 (必须修复)
-- SQL/命令注入漏洞
+### CRITICAL (必须修复)
+- SQL/Command injection vulnerabilities
 - 不安全的 eval/exec 使用
-- Pickle 不安全反序列化
-- 硬编码凭据
-- YAML 不安全加载
-- 隐藏错误的空 except 子句
+- Pickle unsafe deserialization
+- 硬编码的 credentials
+- YAML unsafe load
+- Bare except clauses 隐藏错误
 
-### 高 (应该修复)
-- 公共函数缺少 type hints
-- 可变默认参数
-- 静默吞掉异常
-- 资源不使用 context managers
-- C 风格循环而非推导式
+### HIGH (应该修复)
+- Public functions 缺少 type hints
+- Mutable default arguments
+- 静默吞掉 exceptions
+- 资源未使用 context managers
+- C-style looping 而非 comprehensions
 - 使用 type() 而非 isinstance()
-- 无锁的竞态条件
+- Race conditions without locks
 
-### 中 (考虑修复)
-- PEP 8 格式违规
-- 公共函数缺少 docstrings
-- print 语句而非 logging
-- 低效的字符串操作
-- 无命名常量的魔法数字
-- 不使用 f-strings 进行格式化
-- 不必要的列表创建
+### MEDIUM (考虑修复)
+- PEP 8 formatting violations
+- Public functions 缺少 docstrings
+- 使用 print statements 而非 logging
+- 低效的 string operations
+- 未命名常量的 magic numbers
+- 格式化未使用 f-strings
+- 不必要的 list creation
 
-## 运行的自动化检查
+## 运行的 Automated Checks
 
 ```bash
-# 类型检查
+# Type checking
 mypy .
 
-# 代码检查和格式化
+# Linting and formatting
 ruff check .
 black --check .
 isort --check-only .
 
-# 安全扫描
+# Security scanning
 bandit -r .
 
-# 依赖审计
+# Dependency audit
 pip-audit
 safety check
 
-# 测试
+# Testing
 pytest --cov=app --cov-report=term-missing
 ```
 
 ## 使用示例
 
 ```text
-用户: /python-review
+User: /python-review
 
 Agent:
-# Python 代码审查报告
+# Python Code Review Report
 
 ## 审查的文件
-- app/routes/user.py (已修改)
-- app/services/auth.py (已修改)
+- app/routes/user.py (modified)
+- app/services/auth.py (modified)
 
 ## 静态分析结果
 ✓ ruff: 无问题
-✓ mypy: 无错误
-警告: black: 2 个文件需要重新格式化
-✓ bandit: 无安全问题
+✓ mypy: 无 errors
+WARNING: black: 2 个文件需要 reformatting
+✓ bandit: 无 security issues
 
 ## 发现的问题
 
-[严重] SQL 注入漏洞
+[CRITICAL] SQL Injection vulnerability
 文件: app/routes/user.py:42
-问题: 用户输入直接插值到 SQL 查询中
+问题: 用户 input 直接 interpolated 到 SQL query 中
 ```python
-query = f"SELECT * FROM users WHERE id = {user_id}"  # 错误
+query = f"SELECT * FROM users WHERE id = {user_id}"  # Bad
 ```
-修复: 使用参数化查询
+修复: 使用 parameterized query
 ```python
-query = "SELECT * FROM users WHERE id = %s"  # 正确
+query = "SELECT * FROM users WHERE id = %s"  # Good
 cursor.execute(query, (user_id,))
 ```
 
-[高] 可变默认参数
+[HIGH] Mutable default argument
 文件: app/services/auth.py:18
-问题: 可变默认参数导致共享状态
+问题: Mutable default argument 导致 shared state
 ```python
-def process_items(items=[]):  # 错误
+def process_items(items=[]):  # Bad
     items.append("new")
     return items
 ```
-修复: 使用 None 作为默认值
+修复: 使用 None 作为 default
 ```python
-def process_items(items=None):  # 正确
+def process_items(items=None):  # Good
     if items is None:
         items = []
     items.append("new")
     return items
 ```
 
-[中] 缺少 type hints
+[MEDIUM] Missing type hints
 文件: app/services/auth.py:25
-问题: 公共函数没有类型注解
+问题: Public function 没有 type annotations
 ```python
-def get_user(user_id):  # 错误
+def get_user(user_id):  # Bad
     return db.find(user_id)
 ```
 修复: 添加 type hints
 ```python
-def get_user(user_id: str) -> Optional[User]:  # 正确
+def get_user(user_id: str) -> Optional[User]:  # Good
     return db.find(user_id)
 ```
 
-[中] 不使用 context manager
+[MEDIUM] Not using context manager
 文件: app/routes/user.py:55
-问题: 异常时文件未关闭
+问题: File 在 exception 时未关闭
 ```python
-f = open("config.json")  # 错误
+f = open("config.json")  # Bad
 data = f.read()
 f.close()
 ```
 修复: 使用 context manager
 ```python
-with open("config.json") as f:  # 正确
+with open("config.json") as f:  # Good
     data = f.read()
 ```
 
-## 摘要
-- 严重: 1
-- 高: 1
-- 中: 2
+## Summary
+- CRITICAL: 1
+- HIGH: 1
+- MEDIUM: 2
 
-建议: 不通过: 阻止合并直到严重问题修复
+建议: FAIL: 在修复 CRITICAL issue 前阻止 merge
 
-## 需要格式化
+## 需要 Formatting
 运行: `black app/routes/user.py app/services/auth.py`
 ```
 
-## 批准标准
+## Approval Criteria
 
-| 状态 | 条件 |
-|------|------|
-| 通过: 批准 | 无严重或高问题 |
-| 警告: 提醒 | 只有中等问题 (谨慎合并) |
-| 不通过: 阻止 | 发现严重或高问题 |
+| Status | Condition |
+|--------|-----------|
+| PASS: 批准 | 无 CRITICAL 或 HIGH issues |
+| WARNING: 警告 | 仅有 MEDIUM issues (谨慎 merge) |
+| FAIL: 阻止 | 发现 CRITICAL 或 HIGH issues |
 
 ## 与其他命令的集成
 
-- 首先使用 `tdd-workflow` skill 确保测试通过
-- 使用 `/code-review` 处理非 Python 特定问题
-- 提交前使用 `/python-review`
-- 如果静态分析工具失败，使用 `/build-fix`
+- 首先使用 `tdd-workflow` skill 确保 tests 通过
+- 使用 `/code-review` 处理非 Python 特定 concerns
+- 在 commit 前使用 `/python-review`
+- 如果静态分析 tools 失败，使用 `/build-fix`
 
-## 框架特定审查
+## Framework-Specific Reviews
 
-### Django 项目
-审查者检查：
-- N+1 查询问题 (使用 `select_related` 和 `prefetch_related`)
-- 模型变更缺少迁移
-- 可以使用 ORM 时却使用原始 SQL
+### Django Projects
+Reviewer 检查：
+- N+1 query issues (使用 `select_related` 和 `prefetch_related`)
+- Model 更改缺少 migrations
+- 可使用 ORM 时使用 raw SQL
 - 多步操作缺少 `transaction.atomic()`
 
-### FastAPI 项目
-审查者检查：
-- CORS 错误配置
-- 用于请求验证的 Pydantic 模型
-- 响应模型正确性
+### FastAPI Projects
+Reviewer 检查：
+- CORS misconfiguration
+- Pydantic models 用于 request validation
+- Response models 正确性
 - 正确的 async/await 使用
-- 依赖注入模式
+- Dependency injection patterns
 
-### Flask 项目
-审查者检查：
-- 上下文管理 (app context, request context)
-- 正确的错误处理
-- Blueprint 组织
-- 配置管理
+### Flask Projects
+Reviewer 检查：
+- Context management (app context, request context)
+- 正确的 error handling
+- Blueprint organization
+- Configuration management
 
-## 相关
+## 相关内容
 
 - Agent: `agents/python-reviewer.md`
-- Skills: `skills/python-patterns/`、`skills/python-testing/`
+- Skills: `skills/python-patterns/`, `skills/python-testing/`
 
-## 常见修复
+## Common Fixes
 
 ### 添加 Type Hints
 ```python
-# 之前
+# Before
 def calculate(x, y):
     return x + y
 
-# 之后
+# After
 from typing import Union
 
 def calculate(x: Union[int, float], y: Union[int, float]) -> Union[int, float]:
@@ -222,36 +222,36 @@ def calculate(x: Union[int, float], y: Union[int, float]) -> Union[int, float]:
 
 ### 使用 Context Managers
 ```python
-# 之前
+# Before
 f = open("file.txt")
 data = f.read()
 f.close()
 
-# 之后
+# After
 with open("file.txt") as f:
     data = f.read()
 ```
 
-### 使用列表推导式
+### 使用 List Comprehensions
 ```python
-# 之前
+# Before
 result = []
 for item in items:
     if item.active:
         result.append(item.name)
 
-# 之后
+# After
 result = [item.name for item in items if item.active]
 ```
 
-### 修复可变默认值
+### 修复 Mutable Defaults
 ```python
-# 之前
+# Before
 def append(value, items=[]):
     items.append(value)
     return items
 
-# 之后
+# After
 def append(value, items=None):
     if items is None:
         items = []
@@ -261,37 +261,37 @@ def append(value, items=None):
 
 ### 使用 f-strings (Python 3.6+)
 ```python
-# 之前
+# Before
 name = "Alice"
 greeting = "Hello, " + name + "!"
 greeting2 = "Hello, {}".format(name)
 
-# 之后
+# After
 greeting = f"Hello, {name}!"
 ```
 
-### 修复循环中的字符串拼接
+### 修复 Loops 中的 String Concatenation
 ```python
-# 之前
+# Before
 result = ""
 for item in items:
     result += str(item)
 
-# 之后
+# After
 result = "".join(str(item) for item in items)
 ```
 
-## Python 版本兼容性
+## Python Version Compatibility
 
-当代码使用较新 Python 版本的功能时，审查者会注明：
+当代码使用较新 Python versions 的 features 时，reviewer 会指出：
 
-| 功能 | 最低 Python 版本 |
-|------|-----------------|
+| Feature | Minimum Python |
+|---------|----------------|
 | Type hints | 3.5+ |
 | f-strings | 3.6+ |
-| 海象运算符 (`:=`) | 3.8+ |
-| 仅位置参数 | 3.8+ |
-| Match 语句 | 3.10+ |
+| Walrus operator (`:=`) | 3.8+ |
+| Position-only parameters | 3.8+ |
+| Match statements | 3.10+ |
 | Type unions (`x | None`) | 3.10+ |
 
-确保项目的 `pyproject.toml` 或 `setup.py` 指定了正确的最低 Python 版本。
+确保项目的 `pyproject.toml` 或 `setup.py` 指定了正确的 minimum Python version。
