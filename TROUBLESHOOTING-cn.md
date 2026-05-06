@@ -4,17 +4,17 @@ Everything Claude Code (ECC) 插件的常见问题和解决方案。
 
 ## 目录
 
-- [内存和上下文问题](#内存和上下文问题)
-- [Agent 执行框架故障](#agent-执行框架故障)
-- [Hook 和工作流错误](#hook-和工作流错误)
-- [安装和设置](#安装和设置)
+- [内存与上下文问题](#内存与上下文问题)
+- [Agent 执行失败](#agent-执行失败)
+- [Hook 与工作流错误](#hook-与工作流错误)
+- [安装与设置](#安装与设置)
 - [性能问题](#性能问题)
 - [常见错误信息](#常见错误信息)
 - [获取帮助](#获取帮助)
 
 ---
 
-## 内存和上下文问题
+## 内存与上下文问题
 
 ### 上下文窗口溢出
 
@@ -23,36 +23,36 @@ Everything Claude Code (ECC) 插件的常见问题和解决方案。
 **原因：**
 - 大文件上传超过 token 限制
 - 累积的对话历史
-- 单个会话中有多个大型工具输出
+- 单个会话中存在多个大型工具输出
 
 **解决方案：**
 ```bash
 # 1. 清除对话历史并重新开始
-# 使用 Claude Code："New Chat" 或 Cmd/Ctrl+Shift+N
+# 在 Claude Code 中："New Chat" 或 Cmd/Ctrl+Shift+N
 
-# 2. 在分析前减小文件大小
+# 2. 分析前减少文件大小
 head -n 100 large-file.log > sample.log
 
 # 3. 对大型输出使用流式处理
 head -n 50 large-file.txt
 
-# 4. 将任务拆分成更小的块
+# 4. 将任务拆分为更小的块
 # 不要："分析所有 50 个文件"
-# 改用："分析 src/components/ 目录中的文件"
+# 使用："分析 src/components/ 目录中的文件"
 ```
 
-### 内存持久化故障
+### 内存持久化失败
 
 **症状：** Agent 不记得之前的上下文或观察结果
 
 **原因：**
-- 禁用了持续学习 hooks
+- 禁用了 continuous-learning hooks
 - 观察文件损坏
 - 项目检测失败
 
 **解决方案：**
 ```bash
-# 检查观察记录是否正在被记录
+# 检查观察结果是否正在被记录
 ls ~/.claude/homunculus/projects/*/observations.jsonl
 
 # 查找当前项目的 hash id
@@ -69,10 +69,10 @@ else:
     raise SystemExit("Project hash not found in ~/.claude/homunculus/projects.json")
 PY
 
-# 查看该项目的最近观察记录
+# 查看该项目最近的观察结果
 tail -20 ~/.claude/homunculus/projects/<project-hash>/observations.jsonl
 
-# 在重新创建之前备份损坏的观察文件
+# 在重新创建之前，备份损坏的观察文件
 mv ~/.claude/homunculus/projects/<project-hash>/observations.jsonl \
   ~/.claude/homunculus/projects/<project-hash>/observations.jsonl.bak.$(date +%Y%m%d-%H%M%S)
 
@@ -82,16 +82,16 @@ grep -r "observe" ~/.claude/settings.json
 
 ---
 
-## Agent 执行框架故障
+## Agent 执行失败
 
 ### Agent 未找到
 
 **症状：** "Agent not loaded" 或 "Unknown agent" 错误
 
 **原因：**
-- 插件未正确安装
+- 插件安装不正确
 - Agent 路径配置错误
-- Marketplace 与手动安装不匹配
+- Marketplace 安装与手动安装不匹配
 
 **解决方案：**
 ```bash
@@ -114,7 +114,7 @@ ls ~/.claude/agents/  # 仅自定义 agents
 
 **原因：**
 - Agent 逻辑中的无限循环
-- 阻塞等待用户输入
+- 等待用户输入时阻塞
 - 等待 API 时网络超时
 
 **解决方案：**
@@ -122,10 +122,10 @@ ls ~/.claude/agents/  # 仅自定义 agents
 # 1. 检查卡住的进程
 ps aux | grep claude
 
-# 2. 启用调试模式
+# 2. 启用 debug 模式
 export CLAUDE_DEBUG=1
 
-# 3. 设置更短的超时
+# 3. 设置更短的超时时间
 export CLAUDE_TIMEOUT=30
 
 # 4. 检查网络连接
@@ -137,9 +137,9 @@ curl -I https://api.anthropic.com
 **症状：** "Tool execution failed" 或权限被拒绝
 
 **原因：**
-- 缺少依赖（npm、python 等）
+- 缺少依赖项（npm、python 等）
 - 文件权限不足
-- 路径未找到
+- 未找到路径
 
 **解决方案：**
 ```bash
@@ -150,15 +150,15 @@ which node python3 npm git
 chmod +x ~/.claude/plugins/cache/*/hooks/*.sh
 chmod +x ~/.claude/plugins/cache/*/skills/*/hooks/*.sh
 
-# 检查 PATH 是否包含必要的二进制文件
+# 检查 PATH 包含必要的二进制文件
 echo $PATH
 ```
 
 ---
 
-## Hook 和工作流错误
+## Hook 与工作流错误
 
-### Hooks 未触发
+### Hooks 不触发
 
 **症状：** Pre/post hooks 不执行
 
@@ -189,16 +189,16 @@ bash ~/.claude/plugins/cache/*/hooks/pre-bash.sh <<< '{"command":"echo test"}'
 **原因：**
 - 缺少 Python/Node 安装
 - PATH 未配置
-- 错误的 Python 版本（Windows）
+- Python 版本错误（Windows）
 
 **解决方案：**
 ```bash
-# 安装 Python 3（如果缺失）
+# 安装 Python 3（如果缺少）
 # macOS: brew install python3
 # Ubuntu: sudo apt install python3
 # Windows: 从 python.org 下载
 
-# 安装 Node.js（如果缺失）
+# 安装 Node.js（如果缺少）
 # macOS: brew install node
 # Ubuntu: sudo apt install nodejs npm
 # Windows: 从 nodejs.org 下载
@@ -208,13 +208,13 @@ python3 --version
 node --version
 npm --version
 
-# Windows: 确保 python（不是 python3）可用
+# Windows：确保 python（不是 python3）可用
 python --version
 ```
 
 ### Dev Server 阻止器误报
 
-**症状：** Hook 阻止了提到 "dev" 的合法命令
+**症状：** Hook 阻止提及 "dev" 的合法命令
 
 **原因：**
 - Heredoc 内容触发模式匹配
@@ -222,22 +222,22 @@ python --version
 
 **解决方案：**
 ```bash
-# 这在 v1.8.0+ 中已修复（PR #371）
+# 此问题已在 v1.8.0+ 版本修复（PR #371）
 # 将插件升级到最新版本
 
-# 解决方法：在 tmux 中包装 dev servers
+# 临时解决方案：在 tmux 中包装 dev servers
 tmux new-session -d -s dev "npm run dev"
 tmux attach -t dev
 
-# 如有需要，暂时禁用 hook
+# 如需要，临时禁用 hook
 # 编辑 ~/.claude/settings.json 并移除 pre-bash hook
 ```
 
 ---
 
-## 安装和设置
+## 安装与设置
 
-### 插件未加载
+### 插件不加载
 
 **症状：** 安装后插件功能不可用
 
@@ -249,17 +249,17 @@ tmux attach -t dev
 
 **解决方案：**
 ```bash
-# 首先检查 ECC 对此机器仍然了解什么
+# 首先检查 ECC 对这台机器的了解情况
 ecc list-installed
 ecc doctor
 ecc repair
 
-# 仅在 doctor/repair 无法恢复缺失文件时才重新安装
+# 仅当 doctor/repair 无法恢复缺失文件时才重新安装
 
-# 在更改之前检查插件缓存
+# 更改前检查插件缓存
 ls -la ~/.claude/plugins/cache/
 
-# 备份插件缓存而不是原地删除
+# 备份插件缓存而不是就地删除
 mv ~/.claude/plugins/cache ~/.claude/plugins/cache.backup.$(date +%Y%m%d-%H%M%S)
 mkdir -p ~/.claude/plugins/cache
 
@@ -267,7 +267,7 @@ mkdir -p ~/.claude/plugins/cache
 # Claude Code → Extensions → Everything Claude Code → Uninstall
 # 然后从 marketplace 重新安装
 
-# 如果问题是 marketplace/帐户访问，请单独使用 ECC Tools 计费/帐户恢复；不要将重新安装用作帐户恢复的代理
+# 如果问题是 marketplace/账户访问问题，请单独使用 ECC Tools billing/account recovery；不要将重新安装用作账户恢复的替代方案
 
 # 检查 Claude Code 版本
 claude --version
@@ -284,8 +284,8 @@ cp -r everything-claude-code ~/.claude/plugins/ecc
 
 **原因：**
 - 不存在 lock 文件
-- CLAUDE_PACKAGE_MANAGER 未设置
-- 多个 lock 文件造成检测混淆
+- 未设置 CLAUDE_PACKAGE_MANAGER
+- 多个 lock 文件混淆检测
 
 **解决方案：**
 ```bash
@@ -300,7 +300,7 @@ echo '{"packageManager": "pnpm"}' > .claude/package-manager.json
 npm pkg set packageManager="pnpm@8.15.0"
 
 # 警告：删除 lock 文件可能会更改已安装的依赖版本。
-# 首先提交或备份 lock 文件，然后运行全新安装并重新运行 CI。
+# 先提交或备份 lock 文件，然后运行全新安装并重新运行 CI。
 # 仅在有意切换包管理器时才这样做。
 rm package-lock.json  # 如果使用 pnpm/yarn/bun
 ```
@@ -315,12 +315,12 @@ rm package-lock.json  # 如果使用 pnpm/yarn/bun
 
 **原因：**
 - 观察文件过大
-- 活动 hooks 过多
+- 活跃 hooks 过多
 - 到 API 的网络延迟
 
 **解决方案：**
 ```bash
-# 归档大型观察记录而不是删除它们
+# 归档大型观察结果而不是删除
 archive_dir="$HOME/.claude/homunculus/archive/$(date +%Y%m%d)"
 mkdir -p "$archive_dir"
 find ~/.claude/homunculus/projects -name "observations.jsonl" -size +10M -exec sh -c '
@@ -331,16 +331,16 @@ find ~/.claude/homunculus/projects -name "observations.jsonl" -size +10M -exec s
   done
 ' sh {} +
 
-# 暂时禁用未使用的 hooks
+# 临时禁用未使用的 hooks
 # 编辑 ~/.claude/settings.json
 
-# 保持活动观察文件较小
-# 大型归档文件应保存在 ~/.claude/homunculus/archive/ 下
+# 保持活跃观察文件较小
+# 大型归档应存放在 ~/.claude/homunculus/archive/ 下
 ```
 
 ### CPU 使用率高
 
-**症状：** Claude Code 占用 100% CPU
+**症状：** Claude Code 消耗 100% CPU
 
 **原因：**
 - 无限观察循环
@@ -352,7 +352,7 @@ find ~/.claude/homunculus/projects -name "observations.jsonl" -size +10M -exec s
 # 检查失控进程
 top -o cpu | grep claude
 
-# 暂时禁用持续学习
+# 临时禁用 continuous learning
 touch ~/.claude/homunculus/disabled
 
 # 重启 Claude Code
@@ -391,7 +391,7 @@ npm install
 ### "spawn UNKNOWN"
 
 ```bash
-# Windows 特定：确保脚本使用正确的行尾符
+# Windows 特有：确保脚本使用正确的行尾结束符
 # 将 CRLF 转换为 LF
 find ~/.claude/plugins -name "*.sh" -exec dos2unix {} \;
 
@@ -406,13 +406,13 @@ find ~/.claude/plugins -name "*.sh" -exec dos2unix {} \;
 
 如果您仍然遇到问题：
 
-1. **检查 GitHub Issues：** [github.com/affaan-m/everything-claude-code/issues](https://github.com/affaan-m/everything-claude-code/issues)
-2. **启用调试日志：**
+1. **检查 GitHub Issues**：[github.com/affaan-m/everything-claude-code/issues](https://github.com/affaan-m/everything-claude-code/issues)
+2. **启用 Debug 日志**：
    ```bash
    export CLAUDE_DEBUG=1
    export CLAUDE_LOG_LEVEL=debug
    ```
-3. **收集诊断信息：**
+3. **收集诊断信息**：
    ```bash
    claude --version
    node --version
@@ -420,7 +420,7 @@ find ~/.claude/plugins -name "*.sh" -exec dos2unix {} \;
    echo $CLAUDE_PACKAGE_MANAGER
    ls -la ~/.claude/plugins/cache/
    ```
-4. **打开 Issue：** 包括调试日志、错误信息和诊断信息
+4. **打开 Issue**：包括 debug 日志、错误信息和诊断信息
 
 ---
 
