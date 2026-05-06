@@ -1,30 +1,33 @@
-# 质量门命令
+---
+description: 按需对文件或项目范围运行 ECC quality pipeline 并报告 remediation steps。
+---
 
-按需对文件或项目范围运行 ECC 质量管道。
+# Quality Gate 命令
+
+按需对文件或项目范围运行 ECC quality pipeline。
 
 ## 用法
 
 `/quality-gate [path|.] [--fix] [--strict]`
 
-* 默认目标：当前目录 (`.`)
-* `--fix`：在已配置的地方允许自动格式化/修复
-* `--strict`：在支持的地方警告即失败
+- 默认目标：当前目录 (`.`)
+- `--fix`：在已配置的地方允许 auto-format/fix
+- `--strict`：在支持的地方警告即失败
 
-## 管道
+## Pipeline
 
-1. 检测目标的语言/工具。
-2. 运行格式化检查。
-3. 在可用时运行代码检查/类型检查。
-4. 生成简洁的修复列表。
+1. 检测目标的 language/tooling。
+2. 运行 formatter checks。
+3. 在可用时运行 lint/type checks。
+4. 生成简洁的 remediation list。
 
 ## 备注
 
-此命令镜像了钩子行为，但由操作员调用。
+此命令镜像 hook behavior，但由操作员调用。
 
 ## 参数
 
 $ARGUMENTS:
-
-* `[path|.]` 可选的目标路径
-* `--fix` 可选
-* `--strict` 可选
+- `[path|.]` 可选的 target path
+- `--fix` 可选
+- `--strict` 可选
