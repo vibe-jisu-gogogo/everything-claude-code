@@ -1,185 +1,8 @@
 # 🌐 翻译任务待办清单
 
-> 最后更新：2026-05-06 18:00:32
-> 待翻译：1335 个 | 翻译中：0 个 | 已完成：25 个 | 失败：0 个
+> 最后更新：2026-05-06 18:35:00
+> 待翻译：1150 个 | 翻译中：0 个 | 已完成：10 个 | 失败：0 个
 ## ⏳ 待翻译 (Pending)
-- [ ] `... [OUTPUT TRUNCATED - 2826 chars omitted out of 52826 total] ...`
-- [ ] `./.agents/skills/strategic-compact/SKILL.md`
-- [ ] `./.agents/skills/tdd-workflow/SKILL.md`
-- [ ] `./.agents/skills/verification-loop/SKILL.md`
-- [ ] `./.agents/skills/video-editing/SKILL.md`
-- [ ] `./.agents/skills/x-api/SKILL.md`
-- [ ] `./.claude-plugin/PLUGIN_SCHEMA_NOTES.md`
-- [ ] `./.claude-plugin/README.md`
-- [ ] `./.claude/commands/add-language-rules.md`
-- [ ] `./.claude/commands/database-migration.md`
-- [ ] `./.claude/commands/feature-development.md`
-- [ ] `./.claude/enterprise/controls.md`
-- [ ] `./.claude/research/everything-claude-code-research-playbook.md`
-- [ ] `./.claude/rules/everything-claude-code-guardrails.md`
-- [ ] `./.claude/rules/node.md`
-- [ ] `./.claude/skills/everything-claude-code/SKILL.md`
-- [ ] `./.codebuddy/README.md`
-- [ ] `./.codebuddy/README.zh-CN.md`
-- [ ] `./.codex-plugin/README.md`
-- [ ] `./.codex/AGENTS.md`
-- [ ] `./.cursor/rules/common-agents.md`
-- [ ] `./.cursor/rules/common-coding-style.md`
-- [ ] `./.cursor/rules/common-development-workflow.md`
-- [ ] `./.cursor/rules/common-git-workflow.md`
-- [ ] `./.cursor/rules/common-hooks.md`
-- [ ] `./.cursor/rules/common-patterns.md`
-- [ ] `./.cursor/rules/common-performance.md`
-- [ ] `./.cursor/rules/common-security.md`
-- [ ] `./.cursor/rules/common-testing.md`
-- [ ] `./.cursor/rules/golang-coding-style.md`
-- [ ] `./.cursor/rules/golang-hooks.md`
-- [ ] `./.cursor/rules/golang-patterns.md`
-- [ ] `./.cursor/rules/golang-security.md`
-- [ ] `./.cursor/rules/golang-testing.md`
-- [ ] `./.cursor/rules/kotlin-coding-style.md`
-- [ ] `./.cursor/rules/kotlin-hooks.md`
-- [ ] `./.cursor/rules/kotlin-patterns.md`
-- [ ] `./.cursor/rules/kotlin-security.md`
-- [ ] `./.cursor/rules/kotlin-testing.md`
-- [ ] `./.cursor/rules/php-coding-style.md`
-- [ ] `./.cursor/rules/php-hooks.md`
-- [ ] `./.cursor/rules/php-patterns.md`
-- [ ] `./.cursor/rules/php-security.md`
-- [ ] `./.cursor/rules/php-testing.md`
-- [ ] `./.cursor/rules/python-coding-style.md`
-- [ ] `./.cursor/rules/python-hooks.md`
-- [ ] `./.cursor/rules/python-patterns.md`
-- [ ] `./.cursor/rules/python-security.md`
-- [ ] `./.cursor/rules/python-testing.md`
-- [ ] `./.cursor/rules/swift-coding-style.md`
-- [ ] `./.cursor/rules/swift-hooks.md`
-- [ ] `./.cursor/rules/swift-patterns.md`
-- [ ] `./.cursor/rules/swift-security.md`
-- [ ] `./.cursor/rules/swift-testing.md`
-- [ ] `./.cursor/rules/typescript-coding-style.md`
-- [ ] `./.cursor/rules/typescript-hooks.md`
-- [ ] `./.cursor/rules/typescript-patterns.md`
-- [ ] `./.cursor/rules/typescript-security.md`
-- [ ] `./.cursor/rules/typescript-testing.md`
-- [ ] `./.cursor/skills/article-writing/SKILL.md`
-- [ ] `./.cursor/skills/bun-runtime/SKILL.md`
-- [ ] `./.cursor/skills/content-engine/SKILL.md`
-- [ ] `./.cursor/skills/documentation-lookup/SKILL.md`
-- [ ] `./.cursor/skills/frontend-slides/SKILL.md`
-- [ ] `./.cursor/skills/frontend-slides/STYLE_PRESETS.md`
-- [ ] `./.cursor/skills/investor-materials/SKILL.md`
-- [ ] `./.cursor/skills/investor-outreach/SKILL.md`
-- [ ] `./.cursor/skills/market-research/SKILL.md`
-- [ ] `./.cursor/skills/mcp-server-patterns/SKILL.md`
-- [ ] `./.cursor/skills/nextjs-turbopack/SKILL.md`
-- [ ] `./.gemini/GEMINI.md`
-- [ ] `./.github/ISSUE_TEMPLATE/copilot-task.md`
-- [ ] `./.github/PULL_REQUEST_TEMPLATE.md`
-- [ ] `./.kiro/README.md`
-- [ ] `./.kiro/agents/architect.md`
-- [ ] `./.kiro/agents/build-error-resolver.md`
-- [ ] `./.kiro/agents/chief-of-staff.md`
-- [ ] `./.kiro/agents/code-reviewer.md`
-- [ ] `./.kiro/agents/database-reviewer.md`
-- [ ] `./.kiro/agents/doc-updater.md`
-- [ ] `./.kiro/agents/e2e-runner.md`
-- [ ] `./.kiro/agents/go-build-resolver.md`
-- [ ] `./.kiro/agents/go-reviewer.md`
-- [ ] `./.kiro/agents/harness-optimizer.md`
-- [ ] `./.kiro/agents/loop-operator.md`
-- [ ] `./.kiro/agents/planner.md`
-- [ ] `./.kiro/agents/python-reviewer.md`
-- [ ] `./.kiro/agents/refactor-cleaner.md`
-- [ ] `./.kiro/agents/security-reviewer.md`
-- [ ] `./.kiro/agents/tdd-guide.md`
-- [ ] `./.kiro/docs/longform-guide.md`
-- [ ] `./.kiro/docs/security-guide.md`
-- [ ] `./.kiro/docs/shortform-guide.md`
-- [ ] `./.kiro/hooks/README.md`
-- [ ] `./.kiro/skills/agentic-engineering/SKILL.md`
-- [ ] `./.kiro/skills/api-design/SKILL.md`
-- [ ] `./.kiro/skills/backend-patterns/SKILL.md`
-- [ ] `./.kiro/skills/coding-standards/SKILL.md`
-- [ ] `./.kiro/skills/database-migrations/SKILL.md`
-- [ ] `./.kiro/skills/deployment-patterns/SKILL.md`
-- [ ] `./.kiro/skills/docker-patterns/SKILL.md`
-- [ ] `./.kiro/skills/e2e-testing/SKILL.md`
-- [ ] `./.kiro/skills/frontend-patterns/SKILL.md`
-- [ ] `./.kiro/skills/golang-patterns/SKILL.md`
-- [ ] `./.kiro/skills/golang-testing/SKILL.md`
-- [ ] `./.kiro/skills/postgres-patterns/SKILL.md`
-- [ ] `./.kiro/skills/python-patterns/SKILL.md`
-- [ ] `./.kiro/skills/python-testing/SKILL.md`
-- [ ] `./.kiro/skills/search-first/SKILL.md`
-- [ ] `./.kiro/skills/security-review/SKILL.md`
-- [ ] `./.kiro/skills/tdd-workflow/SKILL.md`
-- [ ] `./.kiro/skills/verification-loop/SKILL.md`
-- [ ] `./.kiro/steering/coding-style.md`
-- [ ] `./.kiro/steering/dev-mode.md`
-- [ ] `./.kiro/steering/development-workflow.md`
-- [ ] `./.kiro/steering/git-workflow.md`
-- [ ] `./.kiro/steering/golang-patterns.md`
-- [ ] `./.kiro/steering/lessons-learned.md`
-- [ ] `./.kiro/steering/patterns.md`
-- [ ] `./.kiro/steering/performance.md`
-- [ ] `./.kiro/steering/python-patterns.md`
-- [ ] `./.kiro/steering/research-mode.md`
-- [ ] `./.kiro/steering/review-mode.md`
-- [ ] `./.kiro/steering/security.md`
-- [ ] `./.kiro/steering/swift-patterns.md`
-- [ ] `./.kiro/steering/testing.md`
-- [ ] `./.kiro/steering/typescript-patterns.md`
-- [ ] `./.kiro/steering/typescript-security.md`
-- [ ] `./.opencode/MIGRATION.md`
-- [ ] `./.opencode/README.md`
-- [ ] `./.opencode/commands/build-fix.md`
-- [ ] `./.opencode/commands/checkpoint.md`
-- [ ] `./.opencode/commands/code-review.md`
-- [ ] `./.opencode/commands/e2e.md`
-- [ ] `./.opencode/commands/eval.md`
-- [ ] `./.opencode/commands/evolve.md`
-- [ ] `./.opencode/commands/go-build.md`
-- [ ] `./.opencode/commands/go-review.md`
-- [ ] `./.opencode/commands/go-test.md`
-- [ ] `./.opencode/commands/harness-audit.md`
-- [ ] `./.opencode/commands/instinct-export.md`
-- [ ] `./.opencode/commands/instinct-import.md`
-- [ ] `./.opencode/commands/instinct-status.md`
-- [ ] `./.opencode/commands/learn.md`
-- [ ] `./.opencode/commands/loop-start.md`
-- [ ] `./.opencode/commands/loop-status.md`
-- [ ] `./.opencode/commands/model-route.md`
-- [ ] `./.opencode/commands/orchestrate.md`
-- [ ] `./.opencode/commands/plan.md`
-- [ ] `./.opencode/commands/projects.md`
-- [ ] `./.opencode/commands/promote.md`
-- [ ] `./.opencode/commands/quality-gate.md`
-- [ ] `./.opencode/commands/refactor-clean.md`
-- [ ] `./.opencode/commands/rust-build.md`
-- [ ] `./.opencode/commands/rust-review.md`
-- [ ] `./.opencode/commands/rust-test.md`
-- [ ] `./.opencode/commands/security.md`
-- [ ] `./.opencode/commands/setup-pm.md`
-- [ ] `./.opencode/commands/skill-create.md`
-- [ ] `./.opencode/commands/tdd.md`
-- [ ] `./.opencode/commands/test-coverage.md`
-- [ ] `./.opencode/commands/update-codemaps.md`
-- [ ] `./.opencode/commands/update-docs.md`
-- [ ] `./.opencode/commands/verify.md`
-- [ ] `./.opencode/instructions/INSTRUCTIONS.md`
-- [ ] `./.trae/README.md`
-- [ ] `./.trae/README.zh-CN.md`
-- [ ] `./AGENTS.md`
-- [ ] `./CHANGELOG.md`
-- [ ] `./CLAUDE.md`
-- [ ] `./COMMANDS-QUICK-REF.md`
-- [ ] `./CONTRIBUTING.md`
-- [ ] `./EVALUATION.md`
-- [ ] `./README.md`
-- [ ] `./README.zh-CN.md`
-- [ ] `./REPO-ASSESSMENT.md`
-- [ ] `./RULES.md`
 - [ ] `./SECURITY.md`
 - [ ] `./SOUL.md`
 - [ ] `./SPONSORING.md`
@@ -541,18 +364,14 @@
 - [ ] `./docs/pt-BR/rules/performance.md`
 - [ ] `./docs/pt-BR/rules/security.md`
 - [ ] `./docs/pt-BR/rules/testing.md`
-- [ ] `./docs/releases`
 - [ ] `./docs/releases/1.10.0/discussion-announcement.md`
 - [ ] `./docs/releases/1.10.0/release-notes.md`
 - [ ] `./docs/releases/1.10.0/x-thread.md`
 - [ ] `./docs/releases/1.8.0/linkedin-post.md`
 - [ ] `./docs/releases/1.8.0/reference-attribution.md`
 - [ ] `./docs/releases/1.8.0/release-notes.md`
+- [ ] `./docs/releases/1.8.0/x-qu`
 - [ ] `./docs/releases/1.8.0/x-quote-eval-skills.md`
-- [ ] `./docs/releases/1.8.0/x-quote-plankton-deslop.md`
-- [ ] `./docs/releases/1.8.0/x-thread.md`
-- [ ] `./docs/releases/2.0.0-rc.1/article-outline.md`
-- [ ] `./docs/releases/2.0.0-rc.1/demo-prompts.md`
 - [ ] `./docs/tr/rules/common/git-workflow.md`
 - [ ] `./docs/tr/rules/common/hooks.md`
 - [ ] `./docs/tr/rules/common/patterns.md`
@@ -1336,39 +1155,22 @@
 - [ ] `cs/tr/rules/common/development-workflow.md`
 
 ## 🔄 翻译中 (Translating)
-- [ ] `./.agents/skills/security-review/SKILL.md`
 - 暂无
 
 ## ✅ 已完成 (Completed)
-- [x] `./.agents/skills/agent-introspection-debugging/SKILL.md`
-- [x] `./.agents/skills/agent-sort/SKILL.md`
-- [x] `./.agents/skills/api-design/SKILL.md`
-- [x] `./.agents/skills/article-writing/SKILL.md`
-- [x] `./.agents/skills/backend-patterns/SKILL.md`
-- [x] `./.agents/skills/brand-voice/SKILL.md`
-- [x] `./.agents/skills/brand-voice/references/voice-profile-schema.md`
-- [x] `./.agents/skills/bun-runtime/SKILL.md`
-- [x] `./.agents/skills/coding-standards/SKILL.md`
-- [x] `./.agents/skills/content-engine/SKILL.md`
-- [x] `./.agents/skills/crosspost/SKILL.md`
-- [x] `./.agents/skills/deep-research/SKILL.md`
-- [x] `./.agents/skills/dmux-workflows/SKILL.md`
-- [x] `./.agents/skills/documentation-lookup/SKILL.md`
-- [x] `./.agents/skills/e2e-testing/SKILL.md`
-- [x] `./.agents/skills/eval-harness/SKILL.md`
-- [x] `./.agents/skills/everything-claude-code/SKILL.md`
-- [x] `./.agents/skills/exa-search/SKILL.md`
-- [x] `./.agents/skills/fal-ai-media/SKILL.md`
-- [x] `./.agents/skills/frontend-patterns/SKILL.md`
+- [x] `./RULES.md` → 完成时间：2026-05-06 18:39:57
+- [x] `./REPO-ASSESSMENT.md` → 完成时间：2026-05-06 18:37:57
+- [x] `./EVALUATION.md` → 完成时间：2026-05-06 18:34:16
+- [x] `./CONTRIBUTING.md` → 完成时间：2026-05-06 18:33:24
+- [x] `./CLAUDE.md` → 完成时间：2026-05-06 18:23:12
+- [x] `./CHANGELOG.md` → 完成时间：2026-05-06 18:22:13
 - [x] `./CODE_OF_CONDUCT.md`
+- [x] `./README.md`
 
 ## ❌ 失败 (Failed)
-- [ ] `./.agents/skills/product-capability/SKILL.md`
-- [ ] `./.agents/skills/nextjs-turbopack/SKILL.md`
-- [ ] `./.agents/skills/mcp-server-patterns/SKILL.md`
-- [ ] `./.agents/skills/market-research/SKILL.md`
-- [x] `/.agents/skills/investor-outreach/SKILL.md`
-- [x] `/.agents/skills/investor-materials/SKILL.md`
-- [x] `/.agents/skills/frontend-slides/STYLE_PRESETS.md`
-- [x] `/.agents/skills/frontend-slides/SKILL.md`
+- [x] `./COMMANDS-QUICK-REF.md`
+- [x] `./AGENTS.md`
 - 暂无
+
+## ⏭️ 已跳过的文件（隐藏目录）
+- 所有路径包含 /. 的文件（共 199 个）
