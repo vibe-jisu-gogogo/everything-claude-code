@@ -6,9 +6,9 @@
 
 ## 使用方法
 
-\`\`\`bash
+```bash
 /workflow <任务描述>
-\`\`\`
+```
 
 ## 上下文
 
@@ -31,12 +31,12 @@
 
 ## 多模型调用规范
 
-**调用语法**（并行：\`run_in_background: true\`，顺序：\`false\`）：
+**调用语法**（并行：`run_in_background: true`，顺序：`false`）：
 
-\`\`\`
+```
 # 新会话调用
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}- \"$PWD\" <<'EOF'
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}- "$PWD" <<'EOF'
 ROLE_FILE: <角色提示路径>
 <TASK>
 Requirement: <增强后的要求（或未增强时为 $ARGUMENTS）>
@@ -51,7 +51,7 @@ EOF",
 
 # 会话恢复调用
 Bash({
-  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}resume <SESSION_ID> - \"$PWD\" <<'EOF'
+  command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}resume <SESSION_ID> - "$PWD" <<'EOF'
 ROLE_FILE: <角色提示路径>
 <TASK>
 Requirement: <增强后的要求（或未增强时为 $ARGUMENTS）>
@@ -63,43 +63,43 @@ EOF",
   timeout: 3600000,
   description: "简洁描述"
 })
-\`\`\`
+```
 
 **模型参数注意事项**：
-- \`{{GEMINI_MODEL_FLAG}}\`：使用 \`--backend gemini\` 时，替换为 \`--gemini-model gemini-3-pro-preview\`（注意末尾空格）；使用 codex 时使用空字符串
+- `{{GEMINI_MODEL_FLAG}}`：使用 `--backend gemini` 时，替换为 `--gemini-model gemini-3-pro-preview`（注意末尾空格）；使用 codex 时使用空字符串
 
 **角色提示**：
 
 | 阶段 | Codex | Gemini |
 |-------|-------|--------|
-| 分析 | \`~/.claude/.ccg/prompts/codex/analyzer.md\` | \`~/.claude/.ccg/prompts/gemini/analyzer.md\` |
-| 计划 | \`~/.claude/.ccg/prompts/codex/architect.md\` | \`~/.claude/.ccg/prompts/gemini/architect.md\` |
-| 评审 | \`~/.claude/.ccg/prompts/codex/reviewer.md\` | \`~/.claude/.ccg/prompts/gemini/reviewer.md\` |
+| 分析 | `~/.claude/.ccg/prompts/codex/analyzer.md` | `~/.claude/.ccg/prompts/gemini/analyzer.md` |
+| 计划 | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/architect.md` |
+| 评审 | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
 
-**会话重用**：每次调用返回 \`SESSION_ID: xxx\`，后续阶段使用 \`resume xxx\` 子命令（注意：是 \`resume\`，不是 \`--resume\`）。
+**会话重用**：每次调用返回 `SESSION_ID: xxx`，后续阶段使用 `resume xxx` 子命令（注意：是 `resume`，不是 `--resume`）。
 
-**并行调用**：使用 \`run_in_background: true\` 启动，通过 \`TaskOutput\` 等待结果。**进入下一阶段前必须等待所有模型返回结果**。
+**并行调用**：使用 `run_in_background: true` 启动，通过 `TaskOutput` 等待结果。**进入下一阶段前必须等待所有模型返回结果**。
 
 **等待后台任务**（使用最大超时 600000ms = 10 分钟）：
 
-\`\`\`
+```
 TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
-\`\`\`
+```
 
 **重要**：
-- 必须指定 \`timeout: 600000\`。否则将以默认 30 秒发生提前超时。
-- 10 分钟后仍未完成时，通过 \`TaskOutput\` 继续轮询，**不要强制终止进程**。
-- 因超时跳过等待时，**必须调用 \`AskUserQuestion\` 询问用户是继续等待还是强制终止任务。不要直接强制终止。**
+- 必须指定 `timeout: 600000`。否则将以默认 30 秒发生提前超时。
+- 10 分钟后仍未完成时，通过 `TaskOutput` 继续轮询，**不要强制终止进程**。
+- 因超时跳过等待时，**必须调用 `AskUserQuestion` 询问用户是继续等待还是强制终止任务。不要直接强制终止。**
 
 ---
 
 ## 沟通指南
 
-1. 响应开头添加模式标签 \`[Mode: X]\`，初始为 \`[Mode: Research]\`。
-2. 遵循严格顺序：\`Research → Ideation → Plan → Execute → Optimize → Review\`。
+1. 响应开头添加模式标签 `[Mode: X]`，初始为 `[Mode: Research]`。
+2. 遵循严格顺序：`Research → Ideation → Plan → Execute → Optimize → Review`。
 3. 各阶段完成后请求用户确认。
 4. 评分 < 7 或用户未批准时强制停止。
-5. 必要时使用 \`AskUserQuestion\` 工具与用户交互（例如：确认/选择/批准）。
+5. 必要时使用 `AskUserQuestion` 工具与用户交互（例如：确认/选择/批准）。
 
 ---
 
@@ -109,23 +109,23 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 
 ### 阶段 1：调研与分析
 
-\`[Mode: Research]\` — 理解要求并收集上下文：
+`[Mode: Research]` — 理解要求并收集上下文：
 
-1. **提示增强**（ace-tool MCP 可用时）：调用 \`mcp__ace-tool__enhance_prompt\`，**将后续所有 Codex/Gemini 调用的原始 $ARGUMENTS 替换为增强结果**。不可用时直接使用 \`$ARGUMENTS\`。
-2. **获取上下文**（ace-tool MCP 可用时）：调用 \`mcp__ace-tool__search_context\`。不可用时使用内置工具：通过 \`Glob\` 搜索文件、\`Grep\` 搜索符号、\`Read\` 收集上下文、\`Task\`（Explore 代理）进行更深入探索。
+1. **提示增强**（ace-tool MCP 可用时）：调用 `mcp__ace-tool__enhance_prompt`，**将后续所有 Codex/Gemini 调用的原始 $ARGUMENTS 替换为增强结果**。不可用时直接使用 `$ARGUMENTS`。
+2. **获取上下文**（ace-tool MCP 可用时）：调用 `mcp__ace-tool__search_context`。不可用时使用内置工具：通过 `Glob` 搜索文件、`Grep` 搜索符号、`Read` 收集上下文、`Task`（Explore 代理）进行更深入探索。
 3. **要求完整性评分**（0-10）：
    - 目标明确性（0-3）、预期结果（0-3）、范围边界（0-2）、约束条件（0-2）
    - ≥7：继续 | <7：停止，询问澄清问题
 
 ### 阶段 2：方案创意生成
 
-\`[Mode: Ideation]\` — 多模型并行分析：
+`[Mode: Ideation]` — 多模型并行分析：
 
-**并行调用**（\`run_in_background: true\`）：
+**并行调用**（`run_in_background: true`）：
 - Codex：使用分析器提示，输出技术可行性、方案、风险
 - Gemini：使用分析器提示，输出 UI 可行性、方案、UX 评估
 
-通过 \`TaskOutput\` 等待结果。保存 **SESSION_ID**（\`CODEX_SESSION\` 和 \`GEMINI_SESSION\`）。
+通过 `TaskOutput` 等待结果。保存 **SESSION_ID**（`CODEX_SESSION` 和 `GEMINI_SESSION`）。
 
 **请遵循上述「多模型调用规范」中的「重要」指示**
 
@@ -133,21 +133,21 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 
 ### 阶段 3：详细计划
 
-\`[Mode: Plan]\` — 多模型协作计划：
+`[Mode: Plan]` — 多模型协作计划：
 
-**并行调用**（通过 \`resume <SESSION_ID>\` 恢复会话）：
-- Codex：使用架构师提示 + \`resume $CODEX_SESSION\`，输出后端架构
-- Gemini：使用架构师提示 + \`resume $GEMINI_SESSION\`，输出前端架构
+**并行调用**（通过 `resume <SESSION_ID>` 恢复会话）：
+- Codex：使用架构师提示 + `resume $CODEX_SESSION`，输出后端架构
+- Gemini：使用架构师提示 + `resume $GEMINI_SESSION`，输出前端架构
 
-通过 \`TaskOutput\` 等待结果。
+通过 `TaskOutput` 等待结果。
 
 **请遵循上述「多模型调用规范」中的「重要」指示**
 
-**Claude 整合**：采用 Codex 的后端计划 + Gemini 的前端计划，用户批准后保存至 \`.claude/plan/task-name.md\`。
+**Claude 整合**：采用 Codex 的后端计划 + Gemini 的前端计划，用户批准后保存至 `.claude/plan/task-name.md`。
 
 ### 阶段 4：实施
 
-\`[Mode: Execute]\` — 代码开发：
+`[Mode: Execute]` — 代码开发：
 
 - 严格遵循已批准计划
 - 遵循现有项目代码标准
@@ -155,19 +155,19 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 
 ### 阶段 5：代码优化
 
-\`[Mode: Optimize]\` — 多模型并行评审：
+`[Mode: Optimize]` — 多模型并行评审：
 
 **并行调用**：
 - Codex：使用评审者提示，聚焦安全性、性能、错误处理
 - Gemini：使用评审者提示，聚焦可访问性、设计一致性
 
-通过 \`TaskOutput\` 等待结果。整合评审反馈，用户确认后执行优化。
+通过 `TaskOutput` 等待结果。整合评审反馈，用户确认后执行优化。
 
 **请遵循上述「多模型调用规范」中的「重要」指示**
 
 ### 阶段 6：质量评审
 
-\`[Mode: Review]\` — 最终评估：
+`[Mode: Review]` — 最终评估：
 
 - 检查相对于计划的完成度
 - 运行测试验证功能
